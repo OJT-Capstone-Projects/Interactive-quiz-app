@@ -1,0 +1,929 @@
+/* ============================================================
+   QUIZ APP – FULL SCREEN | PEACH + DARK THEME
+   ============================================================ */
+
+/* ---- CSS Custom Properties (Peach – default) ---- */
+:root {
+  --bg:           #fff5f0;
+  --bg-alt:       #fde8da;
+  --surface:      #ffffff;
+  --surface-alt:  #fef3ec;
+  --border:       #f9c4a8;
+  --border-focus: #f4845f;
+
+  --text-primary:   #1e1e1e;
+  --text-secondary: #5a5a5a;
+  --text-muted:     #999999;
+
+  --accent:       #f4845f;
+  --accent-dark:  #e05c30;
+  --accent-glow:  rgba(244, 132, 95, 0.25);
+
+  --correct:      #22c55e;
+  --correct-bg:   #dcfce7;
+  --wrong:        #ef4444;
+  --wrong-bg:     #fee2e2;
+  --reveal:       #22c55e;
+  --reveal-bg:    #dcfce7;
+
+  --pill-bg:      #fde8da;
+  --pill-text:    #e05c30;
+
+  --topbar-bg:    #ffffff;
+  --topbar-shadow: 0 2px 12px rgba(244, 132, 95, 0.12);
+
+  --btn-text:     #ffffff;
+  --shadow-card:  0 4px 24px rgba(244, 132, 95, 0.14);
+  --radius:       12px;
+  --transition:   0.28s ease;
+}
+
+/* ---- Dark Mode Overrides ---- */
+body.dark-mode {
+  --bg:           #0f0f0f;
+  --bg-alt:       #1a1a1a;
+  --surface:      #1e1e1e;
+  --surface-alt:  #252525;
+  --border:       #333333;
+  --border-focus: #f4845f;
+
+  --text-primary:   #f0f0f0;
+  --text-secondary: #b0b0b0;
+  --text-muted:     #666666;
+
+  --accent:       #f4845f;
+  --accent-dark:  #e05c30;
+  --accent-glow:  rgba(244, 132, 95, 0.18);
+
+  --correct:      #22c55e;
+  --correct-bg:   #052e16;
+  --wrong:        #ef4444;
+  --wrong-bg:     #2d0a0a;
+  --reveal:       #22c55e;
+  --reveal-bg:    #052e16;
+
+  --pill-bg:      #2a2a2a;
+  --pill-text:    #f4845f;
+
+  --topbar-bg:    #1a1a1a;
+  --topbar-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+
+  --btn-text:     #ffffff;
+  --shadow-card:  0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  transition: background var(--transition), color var(--transition);
+}
+
+/* ============================================================
+   GLOBAL NAVBAR
+   ============================================================ */
+#global-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--surface);
+  border-bottom: 1.5px solid var(--border);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  transition: background var(--transition), border-color var(--transition);
+  gap: 16px;
+}
+
+/* Left – logo + name */
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.nav-logo {
+  font-size: 1.4rem;
+  line-height: 1;
+  display: inline-block;
+  animation: navBounce 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes navBounce {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-3px); }
+}
+
+.nav-name {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+/* Center – stat chips */
+.nav-chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: var(--pill-bg);
+  color: var(--pill-text);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background var(--transition), border-color var(--transition),
+              transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: default;
+}
+
+.nav-chip:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px var(--accent-glow);
+}
+
+/* Timer chip pulses to feel alive */
+.pulse-chip {
+  position: relative;
+}
+
+.pulse-chip::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: chipPulse 1.4s ease-in-out infinite;
+}
+
+/* nudge emoji right to not collide with the dot */
+.pulse-chip {
+  padding-left: 20px;
+}
+
+@keyframes chipPulse {
+  0%, 100% { opacity: 1;   transform: translateY(-50%) scale(1);   }
+  50%       { opacity: 0.3; transform: translateY(-50%) scale(1.6); }
+}
+
+/* Right – theme toggle */
+#theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 16px;
+  background: var(--pill-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 30px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--pill-text);
+  cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: background var(--transition), color var(--transition),
+              border-color var(--transition), transform 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+#theme-toggle:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 3px 12px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+#theme-icon {
+  font-size: 1rem;
+  line-height: 1;
+  display: inline-block;
+  transition: transform 0.4s ease;
+}
+
+body.dark-mode #theme-icon {
+  transform: rotate(180deg);
+}
+
+/* ============================================================
+   SCREENS – FULL PAGE SWITCHING
+   ============================================================ */
+.screen {
+  display: none;
+  position: fixed;
+  top: 56px;               /* sit below the 56px global navbar */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: calc(100vh - 56px);
+  background: var(--bg);
+  overflow-y: auto;
+  transition: background var(--transition);
+}
+
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  animation: screenIn 0.38s ease;
+}
+
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Centered inner wrapper for name / subject / result screens */
+.screen-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;     /* navbar already offsets; just breathing room */
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   SCREEN 1 – NAME INPUT
+   ============================================================ */
+.brand {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.brand-icon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 12px;
+  animation: float 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-10px); }
+}
+
+h1 {
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: -1px;
+  margin-bottom: 6px;
+}
+
+.tagline {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.form-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.form-block label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.form-block input {
+  width: 100%;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition),
+              background var(--transition);
+}
+
+.form-block input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.form-block input::placeholder {
+  color: var(--text-muted);
+}
+
+.error-msg {
+  font-size: 0.82rem;
+  color: var(--wrong);
+  min-height: 18px;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ============================================================
+   SCREEN 2 – SUBJECT SELECTION
+   ============================================================ */
+.welcome-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.welcome-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.welcome-header p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.subject-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.subject-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 22px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-primary);
+  transition: background var(--transition), border-color var(--transition),
+              transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.subject-item:hover {
+  background: var(--surface-alt);
+  border-color: var(--accent);
+  transform: translateX(6px);
+  box-shadow: var(--shadow-card);
+}
+
+.s-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.s-info strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+
+.s-info span {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.s-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.s-count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: var(--pill-bg);
+  color: var(--pill-text);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.s-arrow {
+  font-size: 1.6rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+/* ============================================================
+   SCREEN 3 – QUIZ (FULL SCREEN LAYOUT)
+   ============================================================ */
+
+/* Top Bar */
+.quiz-topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 28px;
+  background: var(--topbar-bg);
+  border-bottom: 1.5px solid var(--border);
+  box-shadow: var(--topbar-shadow);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.subject-pill {
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.q-counter {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.topbar-center {
+  flex: 1;
+  min-width: 120px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-alt);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.timer-pill {
+  background: var(--pill-bg);
+  color: var(--pill-text);
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  transition: background var(--transition), color var(--transition),
+              border-color var(--transition);
+}
+
+.timer-pill.warning {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fbbf24;
+}
+
+.timer-pill.danger {
+  background: var(--wrong-bg);
+  color: var(--wrong);
+  border-color: var(--wrong);
+  animation: timerPulse 0.5s infinite alternate;
+}
+
+@keyframes timerPulse {
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
+}
+
+.score-pill {
+  background: var(--pill-bg);
+  color: var(--pill-text);
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  transition: background var(--transition), color var(--transition),
+              border-color var(--transition);
+}
+
+/* Quiz Body */
+.quiz-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;       /* vertically center the quiz content */
+  padding: 32px 8vw;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  overflow-y: auto;
+}
+
+.question-area {
+  margin-bottom: 24px;
+}
+
+/* matches class="question-num" in HTML */
+.question-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--accent);
+  margin-bottom: 12px;          /* clear visible gap between label and question box */
+}
+
+.question-text {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.55;
+  padding: 22px 24px;
+  background: var(--surface);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  transition: background var(--transition);
+}
+
+/* Options – 2 column grid */
+.options-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.option-btn {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  font-size: 0.97rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.45;
+  transition: background var(--transition), border-color var(--transition),
+              transform 0.15s ease, box-shadow 0.15s ease, color var(--transition);
+}
+
+.option-btn:hover:not(:disabled) {
+  background: var(--surface-alt);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
+.option-btn:disabled {
+  cursor: not-allowed;
+}
+
+/* Feedback states */
+.option-btn.correct {
+  background: var(--correct-bg);
+  border-color: var(--correct);
+  color: var(--correct);
+  font-weight: 700;
+}
+
+.option-btn.wrong {
+  background: var(--wrong-bg);
+  border-color: var(--wrong);
+  color: var(--wrong);
+  font-weight: 700;
+}
+
+.option-btn.reveal {
+  background: var(--reveal-bg);
+  border-color: var(--reveal);
+  color: var(--reveal);
+  font-weight: 700;
+}
+
+/* Feedback message */
+.feedback-msg {
+  min-height: 36px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  transition: background var(--transition), color var(--transition);
+}
+
+.feedback-msg.correct {
+  background: var(--correct-bg);
+  color: var(--correct);
+}
+
+.feedback-msg.wrong {
+  background: var(--wrong-bg);
+  color: var(--wrong);
+}
+
+/* Next Button */
+.btn-next {
+  align-self: flex-end;
+  width: auto;
+  padding: 14px 36px;
+}
+
+/* ============================================================
+   BUTTONS (Global)
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 15px 28px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--transition), transform 0.15s ease,
+              box-shadow 0.15s ease, opacity var(--transition);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: var(--btn-text);
+  box-shadow: 0 4px 18px var(--accent-glow);
+  width: 100%;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px var(--accent-glow);
+}
+
+.btn-primary:disabled {
+  background: var(--border);
+  color: var(--text-muted);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text-secondary);
+  width: 100%;
+}
+
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.btn:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* ============================================================
+   SCREEN 4 – RESULT
+   ============================================================ */
+.result-inner {
+  gap: 10px;
+}
+
+.result-title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.result-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+}
+
+.result-stats {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 90px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-card);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.stat-card.highlight {
+  border-color: var(--accent);
+  background: var(--surface-alt);
+}
+
+.stat-val {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.stat-key {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.performance-msg {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.performance-msg.excellent {
+  background: var(--correct-bg);
+  color: var(--correct);
+}
+
+.performance-msg.good {
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.performance-msg.needs-improvement {
+  background: var(--wrong-bg);
+  color: var(--wrong);
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 640px) {
+  h1 { font-size: 2rem; }
+
+  .brand-icon { font-size: 48px; }
+
+  #global-nav {
+    padding: 0 14px;
+    height: 52px;
+    gap: 10px;
+  }
+
+  /* hide chips on mobile — not enough space */
+  .nav-chips {
+    display: none;
+  }
+
+  .screen {
+    top: 52px;
+    height: calc(100vh - 52px);
+  }
+
+  .quiz-body {
+    padding: 20px 18px;
+    justify-content: center;
+  }
+
+  .options-container {
+    grid-template-columns: 1fr;
+  }
+
+  .quiz-topbar {
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  .topbar-center {
+    order: 3;
+    width: 100%;
+    min-width: unset;
+  }
+
+  .btn-next {
+    width: 100%;
+  }
+
+  .result-stats {
+    gap: 10px;
+  }
+
+  /* icon-only on mobile */
+  #theme-label {
+    display: none;
+  }
+
+  #theme-toggle {
+    padding: 7px 10px;
+  }
+}
+
+/* medium screens: show chips but smaller */
+@media (max-width: 860px) and (min-width: 641px) {
+  .nav-chip {
+    font-size: 0.7rem;
+    padding: 3px 9px;
+  }
+}
+
+@media (max-width: 380px) {
+  .topbar-right {
+    gap: 6px;
+  }
+  .timer-pill, .score-pill {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+}

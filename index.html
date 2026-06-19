@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz App – Multi Subject</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===================================================
+       GLOBAL NAVBAR (visible on all screens)
+  ==================================================== -->
+  <header id="global-nav">
+
+    <!-- Left: brand -->
+    <div class="nav-brand">
+      <span class="nav-logo">🧠</span>
+      <span class="nav-name">Quiz Master</span>
+    </div>
+
+    <!-- Center: quiz stats chips -->
+    <div class="nav-chips">
+      <span class="nav-chip">3 Subjects</span>
+      <span class="nav-chip">30 Questions</span>
+      <span class="nav-chip pulse-chip">15s Timer</span>
+    </div>
+
+    <!-- Right: theme toggle -->
+    <button id="theme-toggle" onclick="toggleTheme()" title="Switch Theme">
+      <span id="theme-icon">🌙</span>
+      <span id="theme-label">Dark Mode</span>
+    </button>
+
+  </header>
+
+  <!-- ===================================================
+       SCREEN 1 – NAME INPUT
+  ==================================================== -->
+  <section id="screen-name" class="screen active">
+    <div class="screen-inner">
+      <div class="brand">
+        <span class="brand-icon">🧠</span>
+        <h1>Quiz Master</h1>
+        <p class="tagline">Test your knowledge. Beat the clock.</p>
+      </div>
+
+      <div class="form-block">
+        <label for="name-input">What's your name?</label>
+        <input
+          type="text"
+          id="name-input"
+          placeholder="Enter your name..."
+          maxlength="30"
+          autocomplete="off"
+        />
+        <span id="name-error" class="error-msg" aria-live="polite"></span>
+        <button class="btn btn-primary" onclick="handleNameSubmit()">
+          Let's Go <span class="arrow">→</span>
+        </button>
+      </div>
+
+      <p class="hint">3 subjects • 10 questions each • 15s per question</p>
+    </div>
+  </section>
+
+  <!-- ===================================================
+       SCREEN 2 – SUBJECT SELECTION
+  ==================================================== -->
+  <section id="screen-subject" class="screen">
+    <div class="screen-inner">
+      <div class="welcome-header">
+        <h2 id="greeting-text">Welcome!</h2>
+        <p>Pick a subject to start your quiz</p>
+      </div>
+
+      <div class="subject-list">
+
+        <button class="subject-item" onclick="selectSubject('javascript')">
+          <div class="s-left">
+            <div class="s-info">
+              <strong>JavaScript Basics</strong>
+              <span>Variables, functions, DOM &amp; more</span>
+            </div>
+          </div>
+          <div class="s-right">
+            <span class="s-count">10 Qs</span>
+            <span class="s-arrow">›</span>
+          </div>
+        </button>
+
+        <button class="subject-item" onclick="selectSubject('html')">
+          <div class="s-left">
+            <div class="s-info">
+              <strong>HTML Basics</strong>
+              <span>Tags, attributes &amp; structure</span>
+            </div>
+          </div>
+          <div class="s-right">
+            <span class="s-count">10 Qs</span>
+            <span class="s-arrow">›</span>
+          </div>
+        </button>
+
+        <button class="subject-item" onclick="selectSubject('css')">
+          <div class="s-left">
+            <div class="s-info">
+              <strong>CSS Basics</strong>
+              <span>Selectors, layout &amp; styling</span>
+            </div>
+          </div>
+          <div class="s-right">
+            <span class="s-count">10 Qs</span>
+            <span class="s-arrow">›</span>
+          </div>
+        </button>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================
+       SCREEN 3 – QUIZ
+  ==================================================== -->
+  <section id="screen-quiz" class="screen">
+
+    <!-- Top Bar -->
+    <div class="quiz-topbar">
+      <div class="topbar-left">
+        <span id="subject-label" class="subject-pill">JS</span>
+        <span id="question-counter" class="q-counter">1 / 10</span>
+      </div>
+      <div class="topbar-center">
+        <div class="progress-track">
+          <div id="progress-bar" class="progress-fill"></div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div id="timer-box" class="timer-pill">
+          Time: <span id="timer-display">15s</span>
+        </div>
+        <div class="score-pill">
+          ⭐ <span id="score-display">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Body -->
+    <div class="quiz-body">
+
+      <div class="question-area">
+        <div class="question-num" id="question-num-label">Question 1</div>
+        <div id="question-text" class="question-text">Loading...</div>
+      </div>
+
+      <div id="options-container" class="options-container"></div>
+
+      <div id="feedback-msg" class="feedback-msg" aria-live="polite"></div>
+
+      <button id="btn-next" class="btn btn-primary btn-next" onclick="nextQuestion()" disabled>
+        Next Question →
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- ===================================================
+       SCREEN 4 – RESULT
+  ==================================================== -->
+  <section id="screen-result" class="screen">
+    <div class="screen-inner result-inner">
+
+      <div id="result-emoji" class="result-emoji"></div>
+      <h2 class="result-title">Quiz Complete!</h2>
+      <p id="result-username" class="result-subtitle"></p>
+
+      <div class="result-stats">
+        <div class="stat-card">
+          <span id="result-correct" class="stat-val">0</span>
+          <span class="stat-key">Correct</span>
+        </div>
+        <div class="stat-card">
+          <span id="result-total" class="stat-val">10</span>
+          <span class="stat-key">Total</span>
+        </div>
+        <div class="stat-card highlight">
+          <span id="result-percent" class="stat-val">0%</span>
+          <span class="stat-key">Score</span>
+        </div>
+      </div>
+
+      <div id="performance-msg" class="performance-msg"></div>
+
+      <div class="result-actions">
+        <button class="btn btn-primary" onclick="restartQuiz()">Try Another Subject</button>
+        <button class="btn btn-outline" onclick="startOver()">Start Over</button>
+      </div>
+
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
