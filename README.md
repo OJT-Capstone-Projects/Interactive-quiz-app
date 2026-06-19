@@ -75,13 +75,15 @@ Template literals
 ---
 
 ## Project Structure
+
+```
 Quiz-Master/
 │
 ├── index.html
 ├── style.css
 ├── app.js
 └── README.md
-
+```
 
 ---
 
