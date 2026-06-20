@@ -851,6 +851,8 @@ h1 {
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+
+/* ---- Tablet / large mobile (≤ 640px) ---- */
 @media (max-width: 640px) {
   h1 { font-size: 2rem; }
 
@@ -862,10 +864,7 @@ h1 {
     gap: 10px;
   }
 
-  /* hide chips on mobile — not enough space */
-  .nav-chips {
-    display: none;
-  }
+  .nav-chips { display: none; }
 
   .screen {
     top: 52px;
@@ -873,7 +872,7 @@ h1 {
   }
 
   .quiz-body {
-    padding: 20px 18px;
+    padding: 20px 16px;
     justify-content: center;
   }
 
@@ -892,25 +891,15 @@ h1 {
     min-width: unset;
   }
 
-  .btn-next {
-    width: 100%;
-  }
+  .btn-next { width: 100%; }
 
-  .result-stats {
-    gap: 10px;
-  }
+  .result-stats { gap: 10px; }
 
-  /* icon-only on mobile */
-  #theme-label {
-    display: none;
-  }
-
-  #theme-toggle {
-    padding: 7px 10px;
-  }
+  #theme-label  { display: none; }
+  #theme-toggle { padding: 7px 10px; }
 }
 
-/* medium screens: show chips but smaller */
+/* medium screens: smaller chips */
 @media (max-width: 860px) and (min-width: 641px) {
   .nav-chip {
     font-size: 0.7rem;
@@ -918,12 +907,209 @@ h1 {
   }
 }
 
-@media (max-width: 380px) {
-  .topbar-right {
+/* ---- Small mobile (≤ 480px) ---- */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.7rem;
+  }
+
+  .tagline {
+    font-size: 0.88rem;
+  }
+
+  .brand {
+    margin-bottom: 28px;
+  }
+
+  .brand-icon {
+    font-size: 40px;
+    margin-bottom: 8px;
+  }
+
+  .screen-inner {
+    padding: 24px 16px;
+  }
+
+  .welcome-header {
+    margin-bottom: 22px;
+  }
+
+  .welcome-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .subject-item {
+    padding: 14px 14px;
+  }
+
+  .s-info strong {
+    font-size: 0.9rem;
+  }
+
+  .question-text {
+    font-size: 1.05rem;
+    padding: 16px 14px;
+  }
+
+  .option-btn {
+    padding: 13px 14px;
+    font-size: 0.88rem;
+  }
+
+  .btn {
+    padding: 13px 18px;
+    font-size: 0.92rem;
+  }
+
+  .result-title {
+    font-size: 1.5rem;
+  }
+
+  .stat-val {
+    font-size: 1.6rem;
+  }
+
+  .stat-card {
+    padding: 14px 10px;
+    min-width: 72px;
+  }
+}
+
+/* ---- 320px (minimum required) ---- */
+@media (max-width: 360px) {
+  h1 {
+    font-size: 1.45rem;
+    letter-spacing: -0.5px;
+  }
+
+  .nav-name {
+    font-size: 0.9rem;
+  }
+
+  .nav-logo {
+    font-size: 1.1rem;
+  }
+
+  #global-nav {
+    padding: 0 10px;
     gap: 6px;
   }
-  .timer-pill, .score-pill {
-    padding: 5px 10px;
+
+  .screen-inner {
+    padding: 16px 12px;
+  }
+
+  .brand {
+    margin-bottom: 20px;
+  }
+
+  .brand-icon {
+    font-size: 34px;
+  }
+
+  .tagline {
     font-size: 0.8rem;
+  }
+
+  .form-block input {
+    padding: 13px 12px;
+    font-size: 0.95rem;
+  }
+
+  .welcome-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .subject-item {
+    padding: 12px 12px;
+  }
+
+  .s-info strong {
+    font-size: 0.85rem;
+  }
+
+  .s-info span {
+    font-size: 0.75rem;
+  }
+
+  .s-count {
+    display: none;       /* too cramped at 320px, arrow is enough */
+  }
+
+  .quiz-topbar {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .subject-pill {
+    font-size: 0.68rem;
+    padding: 3px 8px;
+  }
+
+  .q-counter {
+    font-size: 0.78rem;
+  }
+
+  .timer-pill,
+  .score-pill {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  .quiz-body {
+    padding: 14px 12px;
+  }
+
+  .question-text {
+    font-size: 0.97rem;
+    padding: 13px 12px;
+    border-left-width: 4px;
+  }
+
+  .question-num {
+    font-size: 0.68rem;
+    margin-bottom: 8px;
+  }
+
+  .option-btn {
+    padding: 11px 12px;
+    font-size: 0.83rem;
+  }
+
+  .feedback-msg {
+    font-size: 0.82rem;
+    padding: 8px 12px;
+  }
+
+  .btn {
+    padding: 12px 14px;
+    font-size: 0.88rem;
+  }
+
+  .result-title {
+    font-size: 1.3rem;
+  }
+
+  .result-subtitle {
+    font-size: 0.82rem;
+    margin-bottom: 16px;
+  }
+
+  .stat-val {
+    font-size: 1.4rem;
+  }
+
+  .stat-card {
+    padding: 12px 8px;
+    min-width: 64px;
+  }
+
+  .stat-key {
+    font-size: 0.65rem;
+  }
+
+  .performance-msg {
+    font-size: 0.82rem;
+    padding: 10px 12px;
   }
 }
